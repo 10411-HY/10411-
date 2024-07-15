@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그림 그리기 프로그램</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        canvas {
+            border: 2px solid #333;
+            cursor: crosshair;
+        }
+        #color-picker {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>그림 그리기 프로그램</h1>
+    <canvas id="myCanvas" width="800" height="600"></canvas>
+    <div id="color-picker">
+        <label for="color">펜 색상 선택:</label>
+        <select id="color">
+            <option value="black">검은색</option>
+            <option value="red">빨간색</option>
+            <option value="blue">파란색</option>
+            <option value="yellow">노란색</option>
+            <option value="green">초록색</option>
+            <option value="purple">보라색</option>
+            <option value="pink">분홍색</option>
+        </select>
+    </div>
+    <script src="draw.js"></script>
+</body>
+</html>
+// Canvas 및 Context 설정
+const canvas = document.getElementById('myCanvas');
+const ctx = canvas.getContext('2d');
+
+// 초기 설정
+let drawing = false;
+let color = 'black';
+let lineWidth = 2;
+
+// 마우스 이벤트 리스너 설정
+canvas.addEventListener('mousedown', startDrawing);
+canvas.addEventListener('mousemove', draw);
+canvas.addEventListener('mouseup', endDrawing);
+canvas.addEventListener('mouseleave', endDrawing);
+
+// 색상 선택
+document.getElementById('color').addEventListener('change', function() {
+    color = this.value;
+});
+
+// 그리기 시작
+function startDrawing(e) {
+    drawing = true;
+    draw(e);
+}
+
+// 그리기 중
+function draw(e) {
+    if (!drawing) return;
+
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = lineWidth;
+    ctx.lineCap = 'round';
+    ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+    ctx.stroke();
+}
+
+// 그리기 종료
+function endDrawing() {
+    drawing = false;
+}
